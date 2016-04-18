@@ -31,7 +31,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入账号" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zeM-X2-3FU">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入账号(&gt;=3)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zeM-X2-3FU">
                                         <rect key="frame" x="150" y="54" width="352" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="18S-X0-2Q2"/>
@@ -49,7 +49,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c7T-sN-PFz">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入密码(&gt;=6)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c7T-sN-PFz">
                                         <rect key="frame" x="150" y="91" width="352" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="RBc-Wp-PzO"/>
@@ -91,6 +91,11 @@
                             <constraint firstItem="c8l-wU-9Fm" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="OvF-Kk-3cf"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="button_login" destination="SJ6-VX-aJt" id="dRt-aX-ZaS"/>
+                        <outlet property="textField_account" destination="zeM-X2-3FU" id="BhD-FI-56S"/>
+                        <outlet property="textField_password" destination="c7T-sN-PFz" id="ekr-vi-ePu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
