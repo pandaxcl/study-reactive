@@ -30,10 +30,17 @@
         RACTupleUnpack(NSNumber* accountIsValid, NSNumber* passwordIsValid) = value;
         return @([accountIsValid boolValue] && [passwordIsValid boolValue]);
     }];
-    typeof(self) __weak wself = self;
-    [signalLoginEnabled subscribeNext:^(id x) {
-        typeof(self) sself = wself;
-        sself.button_login.enabled = [x boolValue];
+//    typeof(self) __weak wself = self;
+//    [signalLoginEnabled subscribeNext:^(id x) {
+//        typeof(self) sself = wself;
+//        sself.button_login.enabled = [x boolValue];
+//    }];
+    
+    RAC(self.button_login, enabled) = signalLoginEnabled;
+    RAC(self.button_login, backgroundColor) = [signalLoginEnabled map:^id(NSNumber* value) {
+        if ([value boolValue])
+            return [UIColor blueColor];
+        return [UIColor redColor];
     }];
 }
 
