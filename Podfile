@@ -1,2 +1,2 @@
 use_frameworks!
-pod 'ReactiveCocoa', '~> 4.1'
+pod 'ReactiveCocoa', '2.5'
