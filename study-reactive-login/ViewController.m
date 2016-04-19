@@ -7,12 +7,36 @@
 //
 
 #import "ViewController.h"
+typedef NS_ENUM(NSUInteger, Gender) {
+    Gender_UNKNOWN,
+    Gender_MALE,
+    Gender_FEMALE,
+};
+
+@interface Person: NSObject
+@property(copy)   NSString*  name;  // 姓名
+@property(assign) Gender     gender;// 性别
+@property(assign) NSUInteger age;   // 年龄
+@end
+
+@interface Model: NSObject
+@property(strong) NSArray<Person*>*persons;
+@end
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @end
 
 @implementation ViewController
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
