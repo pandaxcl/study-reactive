@@ -10,6 +10,27 @@
 
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <AFNetworking/AFNetworking.h>
+#import <objc/runtime.h>
+
+@interface NSXMLParser(StudyReactiveNetworking)
+@property NSString* studyComment;
+@end
+
+@implementation NSXMLParser (StudyReactiveNetworking)
+
+static void*kStudyReactiveNetworkingComment = &kStudyReactiveNetworkingComment;
+-(NSString*)studyComment
+{
+    return (NSString *)objc_getAssociatedObject(self, kStudyReactiveNetworkingComment);
+}
+
+-(void)setStudyComment:(NSString *)studyComment
+{
+    objc_setAssociatedObject(self, kStudyReactiveNetworkingComment, studyComment, OBJC_ASSOCIATION_COPY);
+}
+
+@end
+
 
 @interface ViewController ()
 
@@ -27,12 +48,56 @@
     NSSet*contentTypes = [NSSet setWithObjects:@"text/html", nil];
     manager.responseSerializer.acceptableContentTypes = contentTypes;
     
-    [manager GET:@"http://www.csdn.net" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"responseObject = %@", responseObject);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"         error = %@", error);
+    
+    RACSignal*signalCSDN = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [manager.requestSerializer setTimeoutInterval:2];
+        [manager GET:@"http://www.csdn.net" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [(NSXMLParser*)responseObject setStudyComment:@"http://www.csdn.net"];
+            NSLog(@"responseObject = %@, studyComment = %@", responseObject, [(NSXMLParser*)responseObject studyComment]);
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"         error = %@", error);
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+    RACSignal*signalNEWS = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [manager.requestSerializer setTimeoutInterval:5];
+        [manager GET:@"http://www.news.cn" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [(NSXMLParser*)responseObject setStudyComment:@"http://www.news.cn"];
+            NSLog(@"responseObject = %@, studyComment = %@", responseObject, [(NSXMLParser*)responseObject studyComment]);
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"         error = %@", error);
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+    RACSignal*signal163 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [manager.requestSerializer setTimeoutInterval:60];
+        [manager GET:@"http://www.163.com" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [(NSXMLParser*)responseObject setStudyComment:@"http://www.163.com"];
+            NSLog(@"responseObject = %@, studyComment = %@", responseObject, [(NSXMLParser*)responseObject studyComment]);
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"         error = %@", error);
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+    
+    [[[signalCSDN catchTo:signalNEWS] catchTo:signal163]
+    subscribeNext:^(id x) {
+        NSLog(@"x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
     }];
 }
 
