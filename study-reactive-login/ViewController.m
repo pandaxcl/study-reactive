@@ -94,11 +94,61 @@ static void*kStudyReactiveNetworkingComment = &kStudyReactiveNetworkingComment;
         }];
         return nil;
     }];
-    
-    [[[signalCSDN catchTo:signalNEWS] catchTo:signal163]
-    subscribeNext:^(id x) {
-        NSLog(@"x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
-    }];
+    if(0)
+    {
+        RACSignal*signal = [[signalCSDN catchTo:signalNEWS] catchTo:signal163];
+        
+        
+        
+        [[signal subscribeOn:[RACScheduler mainThreadScheduler]]
+        subscribeNext:^(id x) {
+            NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+        }];
+        
+        NSLog(@"==========================================================================================");
+        
+        [[signal subscribeOn:[RACScheduler mainThreadScheduler]]
+         subscribeNext:^(id x) {
+             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+         }];
+        
+        NSLog(@"==========================================================================================");
+        
+        [[signal subscribeOn:[RACScheduler mainThreadScheduler]]
+         subscribeNext:^(id x) {
+             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+         }];
+    }
+    if(1)
+    {
+        RACMulticastConnection*mConnection = [[[signalCSDN catchTo:signalNEWS] catchTo:signal163] publish];
+        
+        //RACMulticastConnection*mConnection = [[RACSignal amb:@[signalCSDN, signalNEWS, signal163] publish];
+        
+        [[[mConnection.signal subscribeOn:[RACScheduler mainThreadScheduler]] logAll]
+         subscribeNext:^(id x) {
+             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+         }];
+        
+        [[mConnection.signal subscribeOn:[RACScheduler mainThreadScheduler]]
+         subscribeNext:^(id x) {
+             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+         }];
+        
+        [[mConnection.signal subscribeOn:[RACScheduler mainThreadScheduler]]
+         subscribeNext:^(id x) {
+             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+         }];
+        
+        [mConnection connect];
+        
+//        [[[mConnection.signal subscribeOn:[RACScheduler mainThreadScheduler]] logAll]
+//         subscribeNext:^(id x) {
+//             NSLog(@"subscribeNext x = %@, studyComment = %@", x, [(NSXMLParser*)x studyComment]);
+//         }];
+//        
+//        [mConnection connect];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
